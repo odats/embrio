@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <style>
+      body {
+        background: #ddd;
+      }
+      canvas {
+        background: white;
+      }
+    </style>
+    <canvas id="canvas"></canvas>
+    <script>
+      const SIZE = 16;
+      const SPEED = 64;
+      const COMPRESS = 0.5;
+      const width = (canvas.width = 512);
+      const height = (canvas.height = 512);
+      const ctx = canvas.getContext("2d");
+
+      requestAnimationFrame(function loop() {
+        requestAnimationFrame(loop);
+
+        ctx.clearRect(0, 0, width, height);
+
+        // chessboard
+        ctx.fillStyle = "#eee";
+        for (let i = 0; i < width / SIZE; i++) {
+          for (let j = 0; j < height / SIZE; j++) {
+            if ((i + j) % 2 == 1) continue;
+            ctx.fillRect(i * SIZE, j * SIZE, SIZE, SIZE);
+          }
+        }
+
+        function f(x) {
+          return Math.sin(x) + (1 / 4) * Math.sin(x * 4);
+        }
+        // sinus
+        const time = performance.now() / 1000;
+        ctx.fillStyle = "red";
+        for (let x = 0; x < width; x+=SIZE/4) {
+          let y = f(x / SPEED + time) * (height / 2) * COMPRESS + height / 2;
+
+          const xx = Math.round(x / SIZE) * SIZE;
+          const yy = Math.round(y / SIZE) * SIZE;
+          ctx.fillRect(xx, yy, SIZE, SIZE);
+          // you can also put it matrix here like this
+
+          // const xxx = Math.round(x / SIZE);
+          // const yyy = Math.round(y / SIZE);
+          // matrix[xxx, yyy] = 1
+        }
+      });
+    </script>
+  </body>
+</html>
